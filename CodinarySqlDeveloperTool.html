@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Developer App</title>
+    <style>
+        /* CSS for the page layout and styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            font-size: 1rem;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Developer App</h1>
+        <form id="queryForm">
+            <label for="query">Enter SQL Query:</label><br>
+            <textarea id="query" rows="6" cols="50" placeholder="SELECT * FROM table_name;"></textarea><br>
+            <button type="submit" id="executeButton">Execute Query</button>
+            <button type="button" id="saveButton">Save Results</button>
+        </form>
+
+        <div id="results">
+            <h2>Query Results:</h2>
+            <pre id="queryResults"></pre>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle SQL execution and save functionality
+
+        // Event listener to handle the form submission and execute the query
+        document.getElementById("queryForm").addEventListener("submit", function (e) {
+            e.preventDefault();  // Prevent the form from refreshing the page
+
+            const query = document.getElementById("query").value;
+            if (query.trim() === "") {
+                alert("Please enter a query.");
+                return;
+            }
+
+            // Simulate the query execution and display the results (for demo purposes)
+            // Replace this with an actual backend request to execute SQL queries
+            const simulatedResults = `Executed query: ${query}\nResults: \n[ ... simulated results ... ]`;
+
+            document.getElementById("queryResults").textContent = simulatedResults;
+        });
+
+        // Save button logic
+        document.getElementById("saveButton").addEventListener("click", function() {
+            const resultsText = document.getElementById("queryResults").textContent;
+            if (!resultsText.trim()) {
+                alert("No results to save.");
+                return;
+            }
+
+            // Ask where to save the file
+            const saveLocation = prompt("Choose Save Location: Downloads, This PC, or Browse (type Browse)");
+
+            if (saveLocation === null) {
+                return; // User canceled
+            }
+
+            let fileName = "query_results";
+            if (saveLocation.toLowerCase() === "browse") {
+                fileName = prompt("Enter random file name:", "query_results_" + Date.now());
+            }
+
+            // Generate a Blob for file download (mimicking a save action)
+            const blob = new Blob([resultsText], { type: "text/plain;charset=utf-8" });
+            
+            // Create a download link for the blob
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName + ".txt";
+
+            // Trigger the download
+            link.click();
+        });
+    </script>
+</body>
+</html>
